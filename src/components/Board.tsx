@@ -56,14 +56,19 @@ const Board = () => {
     };
 
     // Update task title
-    const handleUpdateTask = (id: string, updatedTitle: string) => {
+    const handleUpdateTask = (
+        id: string,
+        updatedTitle: string,
+        updatedDesc: string
+    ) => {
         setTasks(prev =>
             prev.map(task =>
                 task.id === id
                     ? {
                         ...task,
                         title: updatedTitle,
-                        updatedAt: new Date().toISOString(), // update timestamp
+                        description: updatedDesc,
+                        updatedAt: new Date().toISOString(),
                     }
                     : task
             )
