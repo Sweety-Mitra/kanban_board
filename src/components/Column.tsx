@@ -1,8 +1,11 @@
+import type { ReactNode } from "react";
+
 type ColumnProps = {
   title: string;
+  children?: ReactNode;
 };
 
-const Column = ({ title }: ColumnProps) => {
+const Column = ({ title, children }: ColumnProps) => {
   return (
     <div
       style={{
@@ -15,6 +18,7 @@ const Column = ({ title }: ColumnProps) => {
       }}
     >
       <h2>{title}</h2>
+      {children}
     </div>
   );
 };
