@@ -15,15 +15,32 @@ const AddTask = ({ onAdd }: AddTaskProps) => {
     };
 
     return (
-        <div style={{ marginBottom: "20px" }}>
+        <div style={{ marginBottom: "20px", textAlign: "center" }}>
             <input
                 type="text"
                 placeholder="Enter task..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                style={{ padding: "8px", width: "70%", marginRight: "10px" }}
+                style={{
+                    padding: "8px",
+                    width: "250px",
+                    marginRight: "10px",
+                    borderRadius: "6px",
+                    border: "1px solid #ccc",
+                }}
             />
-            <button onClick={handleAdd}>Add</button>
+            <button
+                onClick={handleAdd}
+                style={{
+                    padding: "8px 12px",
+                    borderRadius: "6px",
+                    background: "#007bff",
+                    color: "#fff",
+                    border: "none",
+                }}
+            >
+                Add
+            </button>
         </div>
     );
 };

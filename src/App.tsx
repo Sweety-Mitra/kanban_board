@@ -4,7 +4,7 @@ import Board from "./components/Board";
 function App() {
   return (
     <div>
-      <h1 style={{ textAlign: "center" }}>Kanban Board</h1>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Kanban Board</h1>
       <Board />
     </div>
   );
