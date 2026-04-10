@@ -1,85 +1,105 @@
 import { useState } from "react";
+import { useDraggable } from "@dnd-kit/core";
 import type { Task } from "../types/task";
 
 type TaskCardProps = {
-    task: Task;
-    onUpdate: (id: string, updatedTitle: string, updatedDesc: string) => void;
-    onStatusChange: (id: string, newStatus: Task["status"]) => void;
+  task: Task;
+  onUpdate: (id: string, updatedTitle: string, updatedDesc: string) => void;
+  onStatusChange: (id: string, newStatus: Task["status"]) => void;
 };
 
-const TaskCard = ({ task, onUpdate, onStatusChange  }: TaskCardProps) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [title, setTitle] = useState(task.title);
-    const [description, setDescription] = useState(task.description || "");
+const TaskCard = ({ task, onUpdate, onStatusChange }: TaskCardProps) => {
+  // Edit state
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description || "");
 
-    // Save updated title
-    const handleSave = () => {
-        if (!title.trim()) return;
+  // Make draggable
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.id,
+  });
 
-        onUpdate(task.id, title, description);
-        setIsEditing(false);
-    };
+  // Apply drag movement style
+  const style = {
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : undefined,
+  };
 
-    return (
-        <div
-            style={{
-                background: "#fff",
-                padding: "10px",
-                marginBottom: "10px",
-                borderRadius: "6px",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-            }}
-        >
-            {isEditing ? (
-                <>
-                    {/* Edit title */}
-                    <input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        style={{ width: "100%", marginBottom: "5px" }}
-                    />
+  // Save updated task
+  const handleSave = () => {
+    if (!title.trim()) return;
 
-                    {/* Edit description */}
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        style={{ width: "100%", marginBottom: "5px" }}
-                    />
+    onUpdate(task.id, title, description);
+    setIsEditing(false);
+  };
 
-                    <button onClick={handleSave}>Save</button>
-                </>
-            ) : (
-                <>
-                    {/* Display mode */}
-                    <h4>{task.title}</h4>
-                    {task.description && <p>{task.description}</p>}
+  return (
+    <div
+      ref={setNodeRef} // connect drag
+      style={{
+        ...style,
+        background: "#fff",
+        padding: "10px",
+        marginBottom: "10px",
+        borderRadius: "6px",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+        cursor: "grab",
+      }}
+      {...listeners}   // drag events
+      {...attributes}  // accessibility
+    >
+      {isEditing ? (
+        <>
+          {/* Edit title */}
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            style={{ width: "100%", marginBottom: "5px" }}
+          />
 
-                    <button onClick={() => setIsEditing(true)}>Edit</button>
+          {/* Edit description */}
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            style={{ width: "100%", marginBottom: "5px" }}
+          />
 
-                    {/* Move buttons */}
-                    <div style={{ marginTop: "5px" }}>
-                        {task.status !== "todo" && (
-                            <button onClick={() => onStatusChange(task.id, "todo")}>
-                                Move to Todo
-                            </button>
-                        )}
+          <button onClick={handleSave}>Save</button>
+        </>
+      ) : (
+        <>
+          {/* Display mode */}
+          <h4>{task.title}</h4>
+          {task.description && <p>{task.description}</p>}
 
-                        {task.status !== "in-progress" && (
-                            <button onClick={() => onStatusChange(task.id, "in-progress")}>
-                                Move to In Progress
-                            </button>
-                        )}
+          {/* Edit button */}
+          <button onClick={() => setIsEditing(true)}>Edit</button>
 
-                        {task.status !== "completed" && (
-                            <button onClick={() => onStatusChange(task.id, "completed")}>
-                                Move to Completed
-                            </button>
-                        )}
-                    </div>
-                </>
+          {/* Move buttons */}
+          <div style={{ marginTop: "5px" }}>
+            {task.status !== "todo" && (
+              <button onClick={() => onStatusChange(task.id, "todo")}>
+                Todo
+              </button>
             )}
-        </div>
-    );
+
+            {task.status !== "in-progress" && (
+              <button onClick={() => onStatusChange(task.id, "in-progress")}>
+                In Progress
+              </button>
+            )}
+
+            {task.status !== "completed" && (
+              <button onClick={() => onStatusChange(task.id, "completed")}>
+                Completed
+              </button>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default TaskCard;
