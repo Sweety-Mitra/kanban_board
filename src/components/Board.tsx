@@ -94,49 +94,73 @@ const Board = () => {
         );
     };
 
+    // Handle drop event
+    const handleDragEnd = (event: any) => {
+        const { active, over } = event;
+
+        // If dropped outside any column
+        if (!over) return;
+
+        const taskId = active.id;        // dragged task
+        const newStatus = over.id;       // target column
+
+        // Update task status
+        setTasks(prev =>
+            prev.map(task =>
+                task.id === taskId
+                    ? {
+                        ...task,
+                        status: newStatus,
+                        updatedAt: new Date().toISOString(),
+                    }
+                    : task
+            )
+        );
+    };
+
     return (
-  <div style={{ padding: "20px" }}>
-    <AddTask onAdd={handleAddTask} />
+        <div style={{ padding: "20px" }}>
+            <AddTask onAdd={handleAddTask} />
 
-    {/* DnD Wrapper */}
-    <DndContext>
-      <div style={{ display: "flex", gap: "20px" }}>
-        <Column title="Todo" status="todo">
-          {todoTasks.map(task => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onUpdate={handleUpdateTask}
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-        </Column>
+            {/* DnD Wrapper */}
+            <DndContext onDragEnd={handleDragEnd}>
+                <div style={{ display: "flex", gap: "20px" }}>
+                    <Column title="Todo" status="todo">
+                        {todoTasks.map(task => (
+                            <TaskCard
+                                key={task.id}
+                                task={task}
+                                onUpdate={handleUpdateTask}
+                                onStatusChange={handleStatusChange}
+                            />
+                        ))}
+                    </Column>
 
-        <Column title="In Progress" status="in-progress">
-          {inProgressTasks.map(task => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onUpdate={handleUpdateTask}
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-        </Column>
+                    <Column title="In Progress" status="in-progress">
+                        {inProgressTasks.map(task => (
+                            <TaskCard
+                                key={task.id}
+                                task={task}
+                                onUpdate={handleUpdateTask}
+                                onStatusChange={handleStatusChange}
+                            />
+                        ))}
+                    </Column>
 
-        <Column title="Completed" status="completed">
-          {completedTasks.map(task => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onUpdate={handleUpdateTask}
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-        </Column>
-      </div>
-    </DndContext>
-  </div>
-);
+                    <Column title="Completed" status="completed">
+                        {completedTasks.map(task => (
+                            <TaskCard
+                                key={task.id}
+                                task={task}
+                                onUpdate={handleUpdateTask}
+                                onStatusChange={handleStatusChange}
+                            />
+                        ))}
+                    </Column>
+                </div>
+            </DndContext>
+        </div>
+    );
 };
 
 export default Board;
