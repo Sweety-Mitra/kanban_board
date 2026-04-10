@@ -101,7 +101,7 @@ const Board = () => {
     {/* DnD Wrapper */}
     <DndContext>
       <div style={{ display: "flex", gap: "20px" }}>
-        <Column title="Todo">
+        <Column title="Todo" status="todo">
           {todoTasks.map(task => (
             <TaskCard
               key={task.id}
@@ -112,7 +112,7 @@ const Board = () => {
           ))}
         </Column>
 
-        <Column title="In Progress">
+        <Column title="In Progress" status="in-progress">
           {inProgressTasks.map(task => (
             <TaskCard
               key={task.id}
@@ -123,7 +123,7 @@ const Board = () => {
           ))}
         </Column>
 
-        <Column title="Completed">
+        <Column title="Completed" status="completed">
           {completedTasks.map(task => (
             <TaskCard
               key={task.id}
