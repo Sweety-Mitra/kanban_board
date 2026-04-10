@@ -44,10 +44,8 @@ const TaskCard = ({ task, onUpdate, onStatusChange }: TaskCardProps) => {
                 marginBottom: "12px",
                 borderRadius: "8px",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-                cursor: "grab",
+                cursor: "default", // changed so buttons feel clickable
             }}
-            {...listeners}   // drag events
-            {...attributes}  // accessibility
         >
             {isEditing ? (
                 <>
@@ -69,29 +67,58 @@ const TaskCard = ({ task, onUpdate, onStatusChange }: TaskCardProps) => {
                 </>
             ) : (
                 <>
-                    {/* Display mode */}
-                    <h4>{task.title}</h4>
+                    {/* Drag handle ONLY here (important fix) */}
+                    <h4
+                        {...listeners}
+                        {...attributes}
+                        style={{ cursor: "grab" }}
+                    >
+                        {task.title}
+                    </h4>
+
                     {task.description && <p>{task.description}</p>}
 
+                    <p style={{ fontSize: "12px", color: "#777" }}>
+                        Created: {new Date(task.createdAt).toLocaleString()}
+                    </p>
+
+                    <p style={{ fontSize: "12px", color: "#777" }}>
+                        Updated: {new Date(task.updatedAt).toLocaleString()}
+                    </p>
+
                     {/* Edit button */}
-                    <button style={{ marginRight: "5px" }} onClick={() => setIsEditing(true)}>Edit</button>
+                    <button
+                        style={{ marginRight: "5px" }}
+                        onClick={() => setIsEditing(true)}
+                    >
+                        Edit
+                    </button>
 
                     {/* Move buttons */}
                     <div style={{ marginTop: "8px" }}>
                         {task.status !== "todo" && (
-                            <button style={{ marginRight: "5px" }} onClick={() => onStatusChange(task.id, "todo")}>
+                            <button
+                                style={{ marginRight: "5px" }}
+                                onClick={() => onStatusChange(task.id, "todo")}
+                            >
                                 Todo
                             </button>
                         )}
 
                         {task.status !== "in-progress" && (
-                            <button style={{ marginRight: "5px" }} onClick={() => onStatusChange(task.id, "in-progress")}>
+                            <button
+                                style={{ marginRight: "5px" }}
+                                onClick={() => onStatusChange(task.id, "in-progress")}
+                            >
                                 In Progress
                             </button>
                         )}
 
                         {task.status !== "completed" && (
-                            <button style={{ marginRight: "5px" }} onClick={() => onStatusChange(task.id, "completed")}>
+                            <button
+                                style={{ marginRight: "5px" }}
+                                onClick={() => onStatusChange(task.id, "completed")}
+                            >
                                 Completed
                             </button>
                         )}
