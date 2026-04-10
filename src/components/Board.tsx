@@ -44,10 +44,22 @@ const Board = () => {
             return initialTasks;
         }
     });
-    // Filter tasks based on status
-    const todoTasks = tasks.filter(task => task.status === "todo");
-    const inProgressTasks = tasks.filter(task => task.status === "in-progress");
-    const completedTasks = tasks.filter(task => task.status === "completed");
+
+    // Number of tasks to show per column
+    const [visibleCount, setVisibleCount] = useState(5);
+
+    // Filter + limit tasks
+    const todoTasks = tasks
+        .filter(task => task.status === "todo")
+        .slice(0, visibleCount);
+
+    const inProgressTasks = tasks
+        .filter(task => task.status === "in-progress")
+        .slice(0, visibleCount);
+
+    const completedTasks = tasks
+        .filter(task => task.status === "completed")
+        .slice(0, visibleCount);
 
     // Add new task
     const handleAddTask = (title: string) => {
