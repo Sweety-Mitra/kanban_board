@@ -1,7 +1,7 @@
 import Column from "./Column";
 import TaskCard from "./TaskCard";
 import type { Task } from "../types/task";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddTask from "./AddTask";
 import { DndContext } from "@dnd-kit/core";
 
@@ -117,6 +117,11 @@ const Board = () => {
             )
         );
     };
+
+    // Save tasks whenever state changes
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
     return (
         <div style={{ padding: "20px" }}>
