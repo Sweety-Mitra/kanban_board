@@ -138,13 +138,25 @@ const Board = () => {
         );
     };
 
+    // Load more tasks when reaching bottom
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+
+        // If scrolled to bottom
+        if (scrollTop + clientHeight >= scrollHeight - 5) {
+            setVisibleCount(prev => prev + 5); // load more
+        }
+    };
+
     // Save tasks whenever state changes
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }, [tasks]);
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div
+        onScroll={handleScroll} // detect scroll 
+        style={{ padding: "20px" }}>
             <AddTask onAdd={handleAddTask} />
 
             {/* DnD Wrapper */}
