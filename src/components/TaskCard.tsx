@@ -4,9 +4,10 @@ import type { Task } from "../types/task";
 type TaskCardProps = {
     task: Task;
     onUpdate: (id: string, updatedTitle: string, updatedDesc: string) => void;
+    onStatusChange: (id: string, newStatus: Task["status"]) => void;
 };
 
-const TaskCard = ({ task, onUpdate }: TaskCardProps) => {
+const TaskCard = ({ task, onUpdate, onStatusChange  }: TaskCardProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const [title, setTitle] = useState(task.title);
     const [description, setDescription] = useState(task.description || "");
@@ -52,7 +53,29 @@ const TaskCard = ({ task, onUpdate }: TaskCardProps) => {
                     {/* Display mode */}
                     <h4>{task.title}</h4>
                     {task.description && <p>{task.description}</p>}
+
                     <button onClick={() => setIsEditing(true)}>Edit</button>
+
+                    {/* Move buttons */}
+                    <div style={{ marginTop: "5px" }}>
+                        {task.status !== "todo" && (
+                            <button onClick={() => onStatusChange(task.id, "todo")}>
+                                Move to Todo
+                            </button>
+                        )}
+
+                        {task.status !== "in-progress" && (
+                            <button onClick={() => onStatusChange(task.id, "in-progress")}>
+                                Move to In Progress
+                            </button>
+                        )}
+
+                        {task.status !== "completed" && (
+                            <button onClick={() => onStatusChange(task.id, "completed")}>
+                                Move to Completed
+                            </button>
+                        )}
+                    </div>
                 </>
             )}
         </div>

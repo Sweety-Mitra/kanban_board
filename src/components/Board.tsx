@@ -75,6 +75,24 @@ const Board = () => {
         );
     };
 
+    // Change task status
+    const handleStatusChange = (
+        id: string,
+        newStatus: Task["status"]
+    ) => {
+        setTasks(prev =>
+            prev.map(task =>
+                task.id === id
+                    ? {
+                        ...task,
+                        status: newStatus,
+                        updatedAt: new Date().toISOString(),
+                    }
+                    : task
+            )
+        );
+    };
+
     return (
         <div style={{ padding: "20px" }}>
             {/* Add Task Input */}
@@ -88,6 +106,7 @@ const Board = () => {
                             key={task.id}
                             task={task}
                             onUpdate={handleUpdateTask}
+                            onStatusChange={handleStatusChange}
                         />
                     ))}
                 </Column>
@@ -99,6 +118,7 @@ const Board = () => {
                             key={task.id}
                             task={task}
                             onUpdate={handleUpdateTask}
+                            onStatusChange={handleStatusChange}
                         />
                     ))}
                 </Column>
@@ -110,6 +130,7 @@ const Board = () => {
                             key={task.id}
                             task={task}
                             onUpdate={handleUpdateTask}
+                            onStatusChange={handleStatusChange}
                         />
                     ))}
                 </Column>
