@@ -34,8 +34,16 @@ const initialTasks: Task[] = [
 
 const Board = () => {
     // Store all tasks in state
-    const [tasks, setTasks] = useState<Task[]>(initialTasks);
+    // Load tasks from localStorage (if available)
+    const [tasks, setTasks] = useState<Task[]>(() => {
+        const storedTasks = localStorage.getItem("tasks");
 
+        try {
+            return storedTasks ? JSON.parse(storedTasks) : initialTasks;
+        } catch {
+            return initialTasks;
+        }
+    });
     // Filter tasks based on status
     const todoTasks = tasks.filter(task => task.status === "todo");
     const inProgressTasks = tasks.filter(task => task.status === "in-progress");
