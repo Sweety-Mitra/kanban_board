@@ -3,6 +3,7 @@ import TaskCard from "./TaskCard";
 import type { Task } from "../types/task";
 import { useState } from "react";
 import AddTask from "./AddTask";
+import { DndContext } from "@dnd-kit/core";
 
 // Initial dummy tasks
 const initialTasks: Task[] = [
@@ -94,49 +95,48 @@ const Board = () => {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
-            {/* Add Task Input */}
-            <AddTask onAdd={handleAddTask} />
+  <div style={{ padding: "20px" }}>
+    <AddTask onAdd={handleAddTask} />
 
-            <div style={{ display: "flex", gap: "20px" }}>
-                {/* Todo Column */}
-                <Column title="Todo">
-                    {todoTasks.map(task => (
-                        <TaskCard
-                            key={task.id}
-                            task={task}
-                            onUpdate={handleUpdateTask}
-                            onStatusChange={handleStatusChange}
-                        />
-                    ))}
-                </Column>
+    {/* DnD Wrapper */}
+    <DndContext>
+      <div style={{ display: "flex", gap: "20px" }}>
+        <Column title="Todo">
+          {todoTasks.map(task => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onUpdate={handleUpdateTask}
+              onStatusChange={handleStatusChange}
+            />
+          ))}
+        </Column>
 
-                {/* In Progress Column */}
-                <Column title="In Progress">
-                    {inProgressTasks.map(task => (
-                        <TaskCard
-                            key={task.id}
-                            task={task}
-                            onUpdate={handleUpdateTask}
-                            onStatusChange={handleStatusChange}
-                        />
-                    ))}
-                </Column>
+        <Column title="In Progress">
+          {inProgressTasks.map(task => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onUpdate={handleUpdateTask}
+              onStatusChange={handleStatusChange}
+            />
+          ))}
+        </Column>
 
-                {/* Completed Column */}
-                <Column title="Completed">
-                    {completedTasks.map(task => (
-                        <TaskCard
-                            key={task.id}
-                            task={task}
-                            onUpdate={handleUpdateTask}
-                            onStatusChange={handleStatusChange}
-                        />
-                    ))}
-                </Column>
-            </div>
-        </div>
-    );
+        <Column title="Completed">
+          {completedTasks.map(task => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onUpdate={handleUpdateTask}
+              onStatusChange={handleStatusChange}
+            />
+          ))}
+        </Column>
+      </div>
+    </DndContext>
+  </div>
+);
 };
 
 export default Board;
