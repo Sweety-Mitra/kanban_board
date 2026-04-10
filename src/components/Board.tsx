@@ -1,78 +1,101 @@
-import Column from "./Column"
+import Column from "./Column";
 import TaskCard from "./TaskCard";
-import type { Task } from "./types/task";
+import type { Task } from "../types/task";
 import { useState } from "react";
+import AddTask from "./AddTask";
 
+// Initial dummy tasks
 const initialTasks: Task[] = [
-    {
-        id: "1",
-        title: "Learn React",
-        description: "Hooks and state",
-        status: "todo",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    },
-    {
-        id: "2",
-        title: "Kanban Project",
-        description: "Assignment work",
-        status: "in-progress",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    },
-    {
-        id: "3",
-        title: "Setup Project",
-        status: "completed",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    },
+  {
+    id: "1",
+    title: "Learn React",
+    description: "Hooks and state",
+    status: "todo",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    title: "Kanban Project",
+    description: "Assignment work",
+    status: "in-progress",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "3",
+    title: "Setup Project",
+    status: "completed",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
 ];
 
 const Board = () => {
-    const [tasks, setTasks] = useState<Task[]>(initialTasks);
-    const todoTasks = tasks.filter(task => task.status === "todo");
-    const inProgressTasks = tasks.filter(task => task.status === "in-progress");
-    const completedTasks = tasks.filter(task => task.status === "completed");
-    return (
-        <div
-            style={{
-                display: "flex",
-                gap: "20px",
-                padding: "20px",
-            }}
-        >
-            <Column title="Todo">
-                {todoTasks.map(task => (
-                    <TaskCard
-                        key={task.id}
-                        title={task.title}
-                        description={task.description}
-                    />
-                ))}
-            </Column>
+  // Store all tasks in state
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
-            <Column title="In Progress">
-                {inProgressTasks.map(task => (
-                    <TaskCard
-                        key={task.id}
-                        title={task.title}
-                        description={task.description}
-                    />
-                ))}
-            </Column>
+  // Filter tasks based on status
+  const todoTasks = tasks.filter(task => task.status === "todo");
+  const inProgressTasks = tasks.filter(task => task.status === "in-progress");
+  const completedTasks = tasks.filter(task => task.status === "completed");
 
-            <Column title="Completed">
-                {completedTasks.map(task => (
-                    <TaskCard
-                        key={task.id}
-                        title={task.title}
-                        description={task.description}
-                    />
-                ))}
-            </Column>
-        </div>
-    );
+  // Add new task
+  const handleAddTask = (title: string) => {
+    const newTask: Task = {
+      id: Date.now().toString(), // unique id
+      title,
+      description: "",
+      status: "todo", // default column
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    // Add new task at top
+    setTasks(prev => [newTask, ...prev]);
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      {/* Add Task Input */}
+      <AddTask onAdd={handleAddTask} />
+
+      <div style={{ display: "flex", gap: "20px" }}>
+        {/* Todo Column */}
+        <Column title="Todo">
+          {todoTasks.map(task => (
+            <TaskCard
+              key={task.id}
+              title={task.title}
+              description={task.description}
+            />
+          ))}
+        </Column>
+
+        {/* In Progress Column */}
+        <Column title="In Progress">
+          {inProgressTasks.map(task => (
+            <TaskCard
+              key={task.id}
+              title={task.title}
+              description={task.description}
+            />
+          ))}
+        </Column>
+
+        {/* Completed Column */}
+        <Column title="Completed">
+          {completedTasks.map(task => (
+            <TaskCard
+              key={task.id}
+              title={task.title}
+              description={task.description}
+            />
+          ))}
+        </Column>
+      </div>
+    </div>
+  );
 };
 
 export default Board;
