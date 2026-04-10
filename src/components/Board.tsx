@@ -124,6 +124,8 @@ const Board = () => {
         const taskId = active.id;        // dragged task
         const newStatus = over.id;       // target column
 
+        if (active.id === over.id) return;
+
         // Update task status
         setTasks(prev =>
             prev.map(task =>

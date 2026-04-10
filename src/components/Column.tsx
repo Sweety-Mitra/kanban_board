@@ -26,6 +26,10 @@ const Column = ({ title, status, children }: ColumnProps) => {
             }}
         >
             <h2 style={{ marginBottom: "10px" }}>{title}</h2>
+            {/* Show message if no tasks */}
+            {Array.isArray(children) && children.length === 0 && (
+                <p style={{ color: "#888" }}>No tasks</p>
+            )}
             {children}
         </div>
     );
